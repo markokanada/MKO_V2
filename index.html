@@ -15,10 +15,11 @@
     <!-- Egyéni CSS vége-->
     <script src="https://kit.fontawesome.com/b014d54aef.js" crossorigin="anonymous"></script>
 
+    <script src="JS/main.js"></script>
 
 </head>
 
-<body onload="stars(-1)">
+<body onload="startUp()">
     <header class="">
         <a href="#" class="brand text-decoration-none h1">MKO 2.0</a>
         <div class="menu-btn"></div>
@@ -28,8 +29,8 @@
                 <a class="text-decoration-none ms-3 align-middle" href="#rolunk">Rólunk</a>
                 <a class="text-decoration-none ms-3 align-middle" href="#velemenyek">Vélemények</a>
                 <a class="text-decoration-none ms-3 align-middle" href="#kapcsolat">Kapcsolat</a>
-                <a class="text-decoration-none ms-3 align-middle" href="Kapcsolat.html">Bejelentkezés</a>
-                <a class="text-decoration-none ms-3 align-middle" href="Kapcsolat.html">Regisztráció</a>
+                <a class="text-decoration-none ms-3 align-middle" href="bejelentkezes.html">Bejelentkezés</a>
+                <a class="text-decoration-none ms-3 align-middle" href="regisztracio.html">Regisztráció</a>
             </div>
         </div>
     </header>
@@ -44,7 +45,7 @@
             <h1 class=" fw-bold">Üdvözlünk az
                 <span class="text-danger">MKO V2</span> oldalán<br></h1>
             <p>Ezen az oldalon kigyűjtheti virtuális könyvtárát, rendszerezheti a könyveit, feljegyezheti jelenlegi olvasmányait, megtekinthető jövőbeli könyveinek a lehetséges vásárlási platformjait.</p>
-            <a class="text-decoration-none hovereditem fw-bold" href="#utazasok">Tovább a Bejelentkezéshez</a>
+            <a class="text-decoration-none hovereditem fw-bold" href="bejelentkezes.html">Tovább a Bejelentkezéshez</a>
         </div>
         <div class="row d-sm-flex d-none">
             <div class="col-4"></div>
@@ -138,41 +139,39 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="icon py-2"><i class="fas fa-paper-plane fa-lg"></i></div>
-                    <h4 class="text-center py-2">
+                    <h4 class="text-center py-2"> Kapcsolatfelvétel
                         <h5>
-                            <button class="contact-button">Kapcsolatfelvétel</button>
-
-                            <div class="modal">
-                                <div class="modal-content">
-                                    <span class="close">&times;</span>
-                                    <h2>Kapcsolatfelvétel</h2>
-                                    <form id="contact-form" method="post">
-                                        <label for="name">Név:</label>
-                                        <input type="text" id="name" name="name" required>
-
-                                        <label for="email">E-mail cím:</label>
-                                        <input type="email" id="email" name="email" required>
-
-                                        <label for="phone">Telefonszám:</label>
-                                        <input type="tel" id="phone" name="phone">
-
-                                        <label for="question">Kérdés:</label>
-                                        <textarea id="question" name="question" rows="5" required></textarea>
-
-                                        <button type="submit">Küldés</button>
-                                    </form>
-                                </div>
+                            <div class="d-flex justify-content-center">
+                                <button id="gomb" type="button" onclick="openForm()" class="btn btn-primary">Tovább</button>
                             </div>
+                            <div id="bg" class="d-none contact-form">
+                                <form class="bg-primary" id="contact-form" method="POST">
+                                    <span class="close" onclick="closeForm()">&times;</span>
+                                    <label class="py-2" for="name">Név:</label>
+                                    <input class="py-2" type="text" id="name" name="name" placeholder="Írd be a neved" required>
 
+                                    <label class="py-2" for="phone">Telefonszám:</label>
+                                    <input class="py-2" type="text" id="phone" name="phone" placeholder="Írd be a telefonszámod">
+
+                                    <label class="py-2" for="email">E-mail cím:</label>
+                                    <input class="py-2" type="email" id="email" name="email" placeholder="Írd be az e-mail címed" required>
+
+                                    <label class="py-2" for="message">Üzenet:</label>
+                                    <textarea class="py-2" id="message" name="message" placeholder="Írd ide az üzeneted" required></textarea>
+
+                                    <button class="py-2" type="submit" name="submit">Küldés</button>
+                                </form>
+                            </div>
                         </h5>
                     </h4>
                 </div>
+                <h4>&copy;2023 Made by Buborék Márkó</h4>
             </div>
         </footer>
     </div>
 
-    <script src="JS/main.js"></script>
     <script src="JS/star.js"></script>
+    <script src="JS/contact.js"></script>
 </body>
 
 </html>

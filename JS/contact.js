@@ -1,31 +1,42 @@
-const openModalBtn = document.getElementById("open-modal-btn");
-const modal = document.getElementById("modal");
-const closeBtn = document.querySelector(".close");
-const contactForm = document.getElementById("contact-form");
+// Űrlap megjelenítése
+function openForm() {
+    document.getElementsByClassName("contact-form")[0].style.display = "block";
+    document.getElementsByClassName("contact-form")[0].style.top = window.scrollY + "px";
+    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
 
-openModalBtn.addEventListener("click", function() {
-    modal.style.display = "block";
-});
+}
 
-closeBtn.addEventListener("click", function() {
-    modal.style.display = "none";
-});
+// Űrlap elrejtése
+function closeForm() {
 
-window.addEventListener("click", function(event) {
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-});
+    document.getElementsByClassName("contact-form")[0].style.display = "none";
+    document.getElementsByClassName("contact-form")[0].classList.remove("d-none");
+    document.getElementsByTagName("body")[0].style.overflowY = "visible";
 
-contactForm.addEventListener("submit", function(event) {
-    event.preventDefault();
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const question = document.getElementById("question").value;
-    const subject = `Új kérdés érkezett: ${name}`;
-    const body = `Név: ${name}%0D%0AE-mail: ${email}%0D%0ATelefonszám: ${phone}%0D%0AKérdés: ${question}`;
-    const mailtoLink = `mailto:contact@buborek-marko.online?subject=${subject}&body=${body}`;
-    window.location.href = mailtoLink;
-    modal.style.display = "none";
+}
+
+// Űrlap elküldése
+document.getElementById("contact-form").addEventListener("submit", function(event) {
+
+    event.preventDefault(); // Az alapértelmezett űrlap küldési viselkedésének megakadályozása
+
+    // Az űrlap adatainak összegyűjtése
+    var form = document.getElementById("contact-form");
+    var name = form.elements["name"].value;
+    var phone = form.elements["phone"].value;
+    var email = form.elements["email"].value;
+    var message = form.elements["message"].value;
+
+    // AJAX kérés küldése a PHP backendnek
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://backend.buborek-marko.online/contact.php");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            // Sikeres küldés esetén az űrlap elrejtése és üzenet megjelenítése a felhasználónak
+            closeForm();
+            alert("Az üzenet sikeresen elküldve!");
+        }
+    };
+    xhr.send("name=" + name + "&phone=" + phone + "&email=" + email + "&message=" + message);
 });

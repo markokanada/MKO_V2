@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MKO v2 - Regisztráció</title>
+    <link rel="stylesheet" href="CSS/regisztracio.css">
+</head>
+
+<body>
+    <div class="popup10">
+        <div class="popup10-content">
+            <p>Minden mezőt ki kell tölteni!</p>
+        </div>
+    </div>
+    <div class="popup9">
+        <div class="popup9-content">
+            <p>A felhasználónév nem tartalmazhat egy "@" karaktert!</p>
+        </div>
+    </div>
+
+    <div class="popup8">
+        <div class="popup8-content">
+            <p>Az e-mail címnek valódi e-mail címnek kell lennie!</p>
+        </div>
+    </div>
+
+    <div class="popup7">
+        <div class="popup7-content">
+            <p>Sikeres regisztráció!</p>
+            <div class="progressbar"></div>
+        </div>
+    </div>
+
+    <div class="popup11">
+        <div class="popup11-content">
+            <p>Hiba történt a regisztráció során!</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>MKO v2 Regisztráció</h1>
+        <form id="registration-form" method="post">
+            <label for="username">Felhasználónév</label>
+            <input type="text" id="username" name="username" required>
+            <label for="email">E-mail cím:</label>
+            <input type="text" id="email" name="email" required>
+            <label for="password">Jelszó:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Regisztráció</button>
+        </form>
+        <a href="bejelentkezes.html">Bejelentkezés</a>
+    </div>
+
+    <script src="JS/regisztracio.js "></script>
+</body>
+
+</html>

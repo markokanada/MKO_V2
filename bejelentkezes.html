@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MKO v2 - Bejelentkezés</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link rel="stylesheet" href="CSS/bejelentkezes.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="popup12">
+        <div class="popup12-content">
+            <p id="popup12-text">Hiba történt.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>MKO v2 Bejelentkezés</h1>
+        <form id="login-form" method="post">
+            <label for="username">Felhasználónév / E-mail:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Jelszó:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Bejelentkezés</button>
+        </form>
+        <a href="regisztracio.html">Regisztráció</a>
+    </div>
+
+    <script src="JS/bejelentkezes.js "></script>
+</body>
+
+</html>

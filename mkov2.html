@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MKO V2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="CSS/mkov2.css">
+    <script src="https://kit.fontawesome.com/b014d54aef.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body onload="loading()">
+    <div id="sidebar">
+        <div id="logo"><i class="fas fa-book fa-lg"></i></div>
+        <div id="app-name">MKO V2</div>
+        <ul id="menu">
+            <li><a href="#">Főoldal</a></li>
+            <li><a><button id="" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Hozzáadás</button></a></li>
+            <!--<li><a href="#">Olvasott könyvek</a></li>
+            <li><a href="#">El nem kezdett könyvek</a></li>
+            <li><a href="#">Folyamatban levő könyvek</a></li>
+            <li><a href="#">Meglévő könyvek</a></li>
+            <li><a href="#">Összes Könyv</a></li>-->
+            <li><a href="#">Beállítások</a></li>
+            <li><a href="bejelentkezes.html" onclick="kijelentkezes()">Kijelentkezés</a></li>
+        </ul>
+        <div id="toggle-sidebar"><i class="fas fa-bars"></i></div>
+    </div>
+
+    <div class="popup">
+        <div class="popup-content">
+            <p>Sikeres bejelentkezés!</p>
+            <div class="progressbar"></div>
+        </div>
+    </div>
+
+    <div class="popup3">
+        <div class="popup3-content">
+            <p>Helytelen ISBN!</p>
+        </div>
+    </div>
+
+    <div class="popup4">
+        <div class="popup4-content">
+            <p>Sikeres hozzáadás!</p>
+        </div>
+    </div>
+
+    <div class="popup6">
+        <div class="popup6-content">
+            <p>Sikeres képfeltöltés!</p>
+        </div>
+    </div>
+
+    <div class="popup5">
+        <div class="popup5-content">
+            <p>A könyv nem található. Próbálkozhat újra, vagy feltöltheti manuálisan!</p>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal2-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Automatikus könyvhozzáadás</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="isbnInput" placeholder=" ">
+                        <label for="isbnInput">ISBN</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="manualis" type="button" class="btn btn-success d-none" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#exampleModal3">Manuális hozzáadás</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+                    <button type="button" class="btn btn-primary" onclick="isbnSearch()" id="searchBtn">Keresés</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manuális könyvhozzáadás felugró ablak -->
+
+    <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal3-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal3-title" id="exampleModalLabel">Manuális könyvhozzáadás</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            <label for="titleInput">Cím</label>
+                            <input type="text" class="form-control" id="titleInput" placeholder=" ">
+                            <label for="authorInput">Szerző</label>
+                            <input type="text" class="form-control" id="authorInput" placeholder=" ">
+
+                            <label for="publisherInput">Kiadó <i><span.text-danger>(nem kötelező)</span.text-danger></i></label>
+                            <input type="text" class="form-control" id="publisherInput" placeholder=" ">
+                            <label for="publishedDate">Megjelenési dátum <i><span.text-danger>(nem kötelező)</span.text-danger></i></label>
+                            <input type="text" class="form-control" id="publishedDate" placeholder=" ">
+
+
+                            <div class="mb-3">
+                                <label for="url" class="form-label">Kép URL-ről:</label>
+                                <input type="url" class="form-control" id="url" name="url">
+                            </div>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Képfeltöltés:</label>
+                                <input onchange="kepFeltoltes()" type="file" class="form-control" id="image" name="image" accept="image/*">
+                                <small class="form-text text-muted">Maximális méret: 25MB</small>
+                            </div>
+                            <button class="btn btn-primary">Feltöltés</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="manualis" type="button" class="btn btn-success d-none" data-bs-dismiss="modal" data-bs-toggle="modal3" data-bs-target="#exampleModal2">Manuális hozzáadás</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+                    <button type="button" class="btn btn-success" onclick="manualAppend()" id="addManual">Hozzáadás</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="background" id="bg"></div>
+    <div class="images" id="img"></div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="
+https://cdn.jsdelivr.net/npm/isbn-validator@1.2.0/index.min.js
+"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="JS/mkov2.js"></script>
+</body>
+
+</html>
