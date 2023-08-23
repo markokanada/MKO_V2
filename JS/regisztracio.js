@@ -101,7 +101,7 @@ document.getElementById('registration-form').addEventListener('submit', function
 
     // elküldi az adatokat a szervernek
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://backend.buborek-marko.online/regisztracio.php');
+    xhr.open('POST', 'http://kellsosserver.duckdns.org:7000/regisztracio.php');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
         if (xhr.status === 200) {

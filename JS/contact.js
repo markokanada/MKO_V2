@@ -29,7 +29,7 @@ document.getElementById("contact-form").addEventListener("submit", function(even
 
     // AJAX kérés küldése a PHP backendnek
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://backend.buborek-marko.online/contact.php");
+    xhr.open("POST", "http://kellsosserver.duckdns.org:7000/contact.php");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function() {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {

@@ -9,7 +9,7 @@ function sendData() {
     })
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://backend.buborek-marko.online/star.php", true);
+    xhr.open("POST", "http://kellsosserver.duckdns.org:7000/star.php", true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send("data=" + value);
 

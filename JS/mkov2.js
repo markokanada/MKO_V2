@@ -4,6 +4,70 @@ function hasCookie(name) {
     });
 }
 
+var seconds = 30 * 60;
+
+function imgurStats(){
+const clientId = '5b05f11e00511f8'; // Az Imgur API Client ID-je
+
+    
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'https://api.imgur.com/3/credits', true);
+      xhr.setRequestHeader('Authorization', `Client-ID ${clientId}`);
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          const remainingCredits = response.data.UserRemaining;
+          const totalCredits = response.data.UserLimit;
+          const resetTime = new Date(response.data.UserReset * 1000).toLocaleString();
+
+          const creditInfo = `Havi limit: ${totalCredits}\nFennmaradó havi kredit: ${remainingCredits}\nKreditek újratöltődnek: ${resetTime}`;
+        }
+      };
+
+      xhr.send();
+
+}
+
+function isbnValidator(isbn) {
+    let subject = `${isbn}`;
+     var regex = /^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$/;
+    if (regex.test(subject)) {
+        var chars = subject.replace(/[- ]|^ISBN(?:-1[03])?:?/g, "").split("");
+        var last = chars.pop();
+        var sum = 0;
+        var check, i;
+
+        if (chars.length == 9) {
+            chars.reverse();
+            for (i = 0; i < chars.length; i++) {
+                sum += (i + 2) * parseInt(chars[i], 10);
+            }
+            check = 11 - (sum % 11);
+            if (check == 10) {
+                check = "X";
+            } else if (check == 11) {
+                check = "0";
+            }
+        } else {
+            for (i = 0; i < chars.length; i++) {
+                sum += (i % 2 * 2 + 1) * parseInt(chars[i], 10);
+            }
+            check = 10 - (sum % 10);
+            if (check == 10) {
+                check = "0";
+            }
+        }
+        if (check == last) {
+		return true;
+        } else {
+		return false;
+        }
+    } else {
+	return false;
+    }
+    return false;
+} 
 
 function isLoggedIn() {
     return hasCookie("logedIn");
@@ -98,6 +162,24 @@ function SuccessfullImageUpload() {
     showPopup6();
 }
 
+    function startCountdown() {
+      var countdownElement = document.getElementById("countdown");
+      var interval = setInterval(function() {
+        var minutes = Math.floor(seconds / 60);
+        var remainingSeconds = seconds % 60;
+
+        var formattedTime = (minutes < 10 ? "0" : "") + minutes + ":" + (remainingSeconds < 10 ? "0" : "") + remainingSeconds;
+        countdownElement.innerHTML = formattedTime;
+
+        if (seconds === 0) {
+          clearInterval(interval);
+          countdownElement.innerHTML = "Vége a visszaszámlálásnak!";
+        }
+
+        seconds--;
+      }, 1000); 
+    }
+
 function NotFoundedWarning() {
 
     const popup5 = document.querySelector(".popup5");
@@ -149,22 +231,6 @@ function isValidISBN13(isbn) {
     return true;
 }
 
-let bookData1 = {
-    cim: "",
-    szerzo: "",
-    kiado: "",
-    megjelenes: "",
-    kep: ""
-};
-let bookData2 = {
-    cim: "",
-    szerzo: "",
-    kiado: "",
-    megjelenes: "",
-    kep: ""
-};
-let error = "";
-
 function Google(isbn) {
     return new Promise((resolve, reject) => {
         const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`;
@@ -177,7 +243,9 @@ function Google(isbn) {
                 return response.json();
             })
             .then(data => {
-                resolve(data);
+                setTimeout(() => {
+                    resolve(data);
+                }, 1000);
             })
             .catch(error => {
                 reject(error);
@@ -197,7 +265,12 @@ function openlibrary(isbn) {
                 return response.json();
             })
             .then(data => {
-                resolve(data);
+
+                setTimeout(() => {
+                    
+                    resolve(data);;
+                }, 1000);
+
             })
             .catch(error => {
                 reject(error);
@@ -206,6 +279,21 @@ function openlibrary(isbn) {
 }
 
 function searchBook(isbn) {
+let bookData1 = {
+    cim: "",
+    szerzo: "",
+    kiado: "",
+    megjelenes: "",
+    kep: ""
+};
+let bookData2 = {
+    cim: "",
+    szerzo: "",
+    kiado: "",
+    megjelenes: "",
+    kep: ""
+};
+let error = "";
     return new Promise((resolve, reject) => {
         Google(isbn).then(data => {
             if (data.totalItems > 0) {
@@ -223,12 +311,23 @@ function searchBook(isbn) {
 
                 bookData1.cim = book2.title;
                 bookData1.megjelenes = book2.publishedDate;
-                if (book2.imageLinks.thumbnail != undefined || book2.imageLinks.thumbnail != null) {
-                    bookData1.kep = book2.imageLinks.thumbnail
-                } else if (book2.imageLinks.smallThumbnail != undefined || book2.imageLinks.smallThumbnail != null) {
-                    bookData1.kep = book2.imageLinks.smallThumbnail
+                
+		if("imageLinks" in book2){
+			if("thumbnail" in book2.imageLinks){
+				if (book2.imageLinks.thumbnail != undefined || book2.imageLinks.thumbnail != null) {
+					 bookData1.kep =   book2.imageLinks.thumbnail }
+			}
+			else if("smallThumbnail" in book2.imageLinks){
+				if (book2.imageLinks.smallThumbnail != undefined || book2.imageLinks.smallThumbnail != null) {
+					bookData.kep = book2.imageLinks.smallThumbnail
+				}
+			}
                 }
-                resolve(bookData1)
+
+                setTimeout(() => {
+                    
+                    resolve(bookData1);
+                }, 1000);
             } else {
 
                 NotFoundedWarning();
@@ -252,7 +351,10 @@ function searchBook(isbn) {
 
                         bookData2.megjelenes = book2.publish_date;
                         bookData2.kep = `http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
-                        resolve(bookData2)
+                        setTimeout(() => {
+                            
+                            resolve(bookData2); 
+                        }, 1000);
                     } else {
 
                         NotFoundedWarning();
@@ -289,7 +391,11 @@ function isbnSearch() {
 
         if (isbnValidator(realISBN)) {
             searchBook(realISBN).then(data => {
-                upload(data);
+               if(data.kep !== undefined && data.kep !== ""){
+		 upload(data);}
+		else{
+		NotFoundedWarning();
+		}
             })
 
         } else {
@@ -301,13 +407,17 @@ function isbnSearch() {
 
         if (isValidISBN13(realISBN)) {
             searchBook(realISBN).then(data => {
-                upload(data);
+		if(data.kep !== undefined && data.kep !== ""){
+                upload(data);}
+		else{
+			NotFoundedWarning();
+		}
             })
 
         } else {
             wrongISBN();
         }
-    } else {
+    } else if (realISBN.split("").length !== 10 && realISBN.split("").length !== 13) {
         wrongISBN();
     }
 
@@ -329,17 +439,23 @@ function manualAppend() {
 
 }
 
+const form = document.querySelector('#uploadForm');
+
+    form.addEventListener('submit', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+	kepFeltoltes();
+})
+
 function kepFeltoltes() {
 
     const clientId = '5b05f11e00511f8';
 
-    const form = document.querySelector('#uploadForm');
     const fileInput = document.querySelector('#image');
     const urlInput = document.querySelector('#url');
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-
+	console.log("imgurAPI")
+	urlInput.value = "";
         if (urlInput.value == "") {
             const file = fileInput.files[0];
             const formData = new FormData();
@@ -348,14 +464,13 @@ function kepFeltoltes() {
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'https://api.imgur.com/3/image');
-            xhr.setRequestHeader('Authorization', 'Client-ID ' + clientId);
+            xhr.setRequestHeader('Authorization', `Client-ID ${clientId}`);
 
             xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
+                if (xhr.readyState === 4 && xhr.status===200) {
                     const response = JSON.parse(xhr.responseText);
                     const imageUrl = response.data.link;
                     urlInput.value = imageUrl;
-                    return imageUrl;
                     SuccessfullImageUpload();
 
                 }
@@ -363,7 +478,6 @@ function kepFeltoltes() {
 
             xhr.send(formData);
         }
-    });
 
 }
 
@@ -374,7 +488,7 @@ function upload(data) {
 
     var xhttp = new XMLHttpRequest();
 
-    xhttp.open("POST", "http://backend.buborek-marko.online/hozzaadas.php", true);
+    xhttp.open("POST", "http://kellsosserver.duckdns.org:7000/hozzaadas.php", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 
@@ -387,15 +501,16 @@ function upload(data) {
         }
     };
     let adat = {
-        "username": username,
-        "cim": data.cim,
-        "szerzo": data.szerzo,
-        "kiado": data.kiado,
-        "megjelenes": data.megjelenes,
-        "kep": data.kep
+        "username": username !== undefined ? username : "",
+        "cim": data.cim !== undefined ? data.cim.replaceAll("'","") : "",
+        "szerzo": data.szerzo !== undefined ? data.szerzo.replaceAll("'","") : "",
+        "kiado": data.kiado !== undefined ? data.kiado.replaceAll("'","") : "",
+        "megjelenes": data.megjelenes !== undefined ? data.megjelenes.replaceAll("'","") : "",
+        "kep": data.kep !== undefined ? data.kep : ""
     }
-
     xhttp.send(JSON.stringify(adat));
+
+    setTimeout(loading(), 1500)
 }
 
 function getCookie(name) {
@@ -421,59 +536,10 @@ function currentScales() {
 
     return optionalWidth;
 }
-/*
-function imageScales(urls) {
-    const promises = urls.map((url) => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.src = url;
-            img.onload = function() {
-                const imgSize = {
-                    width: this.width,
-                    height: this.height,
-                };
-                resolve(imgSize);
-            };
-            img.onerror = function() {
-                reject(new Error('Kép betöltése sikertelen.'));
-            };
-        });
-    });
-    return Promise.all(promises);
-}
-*/
-/*
-function imageScales(urls) {
-    return new Promise(async(resolve, reject) => {
-        const sizes = [];
 
-        for (let i = 0; i < urls.length; i++) {
-            const img = new Image();
-
-            img.onerror = () => {
-                reject(new Error(`Kép betöltése sikertelen: ${urls[i]}`));
-            };
-
-            await new Promise((imgResolve) => {
-                img.onload = () => {
-                    const imgSize = {
-                        width: img.width,
-                        height: img.height,
-                    };
-                    sizes.push(imgSize);
-                    imgResolve();
-                };
-                img.src = urls[i];
-            });
-        }
-
-        resolve(sizes);
-    });
-}
-*/
 function imageScales(urls) {
     return new Promise((resolve, reject) => {
-        //console.log(urls)
+        
         let sizes = [];
         let count = 0;
         for (let i = 0; i < urls.length; i++) {
@@ -487,7 +553,11 @@ function imageScales(urls) {
                 sizes.push(imgSize);
                 count++;
                 if (count === urls.length) {
-                    resolve(sizes);
+                    setTimeout(() => {
+                        
+                        resolve(sizes); 
+                    }, 10);
+
                 }
             };
             img.onerror = function() {
@@ -528,9 +598,10 @@ function generateBackground(height) {
         heightIterations = height;
     }
 
+
     for (let j = 0; j < heightIterations; j++) {
         for (let i = 0; i < iterations; i++) {
-            innerred += `<img src="Assets/empty-bookcase.webp" style="display:block;position:absolute;top:${j*optimalHeight}px;left:${(i*optimalWidth)+menuWidth}px;height:${optimalHeight}px;width: ${optimalWidth}px;}" alt="">`
+            innerred += `<img id='book-bg' src="Assets/empty-bookcase.webp" style="display:block;position:absolute;top:${j*optimalHeight}px;left:${(i*optimalWidth)+menuWidth}px;height:${optimalHeight}px;width: ${optimalWidth}px;}" alt="">`
         }
 
     }
@@ -541,8 +612,34 @@ function generateBackground(height) {
 
 }
 
-function generateImages(columnSize, bgstat, images, titles, authors, publishers, date) {
-    console.log(columnSize, bgstat, images, titles, authors, publishers, date)
+function changeState(id, desiredState) {
+
+    let dom = document.getElementById(id)
+    if (desiredState) {
+        dom.innerHTML = `<i class="fa-solid fa-square-check fa-2xl" style="color: #73ff00; margin-top:98%" onclick="changeState(${id}, false)"></i>`
+    } else if (!desiredState) {
+        dom.innerHTML = `<i class="fa-regular fa-square-check fa-2xl" style="color: #73ff00; margin-top:98%" onclick="changeState(${id}, true)"></i>`
+    }
+
+    const xhr = new XMLHttpRequest();
+    const url = "http://kellsosserver.duckdns.org:7000/állapotVáltás.php";
+
+
+    const data = new FormData();
+    data.append("id", id);
+    data.append("desiredState", desiredState);
+
+    xhr.open("POST", url, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+        }
+    };
+    xhr.send(data);
+
+}
+
+function generateImages(columnSize, bgstat, images, titles, authors, publishers, date, ids, olvasotts) {
+
     let optionalWidth = bgstat.optimalWidth;
     let maxHeight = bgstat.optimalHeight * 0.8;
     let maxWidth;
@@ -552,24 +649,31 @@ function generateImages(columnSize, bgstat, images, titles, authors, publishers,
         maxWidth = ((window.innerWidth) * 0.8) / columnSize
     }
 
+
+    //images = ["http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"]
     imageScales(images) //["https://i.imgur.com/17PrU7g.jpg", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"])
         .then((imgSizes) => {
-            console.log(imgSizes)
+
+
+        
             let img = document.getElementById("img");
             let inner = "";
             let counter = 0;
             let start = "<div class='row'>";
-            let baseStart = "<div class='col-sm-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2'>";
+            let baseStart = "<div class='col-sm-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 px-2'>";
             let baseend = "</div>"
             let end = "</div>";
-
+            let left = 0;
+            let top = 0;
+            let count = 0;
+            let rowCount = 1;
             for (let i = 0; i < imgSizes.length; i++) {
                 let currentRatio = imgSizes[i].width / imgSizes[i].height;
                 let currentWidth;
                 if (i % 4 == 0 && i != 0) {
                     counter++;
                 }
-                if (maxWidth / currentRatio > maxHeight) {
+                if (maxWidth / currentRatio > maxHeight && window.innerWidth > 576) {
                     currentWidth = maxWidth;
                     while (currentWidth / currentRatio > maxHeight) {
                         currentWidth--;
@@ -578,15 +682,60 @@ function generateImages(columnSize, bgstat, images, titles, authors, publishers,
                     currentWidth = maxWidth;
                 }
                 let currentHeight = currentWidth / currentRatio;
+                let bgHeight = document.getElementById("book-bg").offsetHeight;
+                baseStart = `<div class='d-flex col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 ps-2 pe-4' style='height:${bgHeight}px'>`
+
+
+
+                if (window.innerWidth < 576) {
+                    rowCount = 1;
+                } else if (window.innerWidth > 1400) {
+                    rowCount = 6;
+                } else if (window.innerWidth > 1200) {
+                    rowCount = 4;
+                } else if (window.innerWidth > 992) {
+                    rowCount = 3;
+                } else if (window.innerWidth > 768) {
+                    rowCount = 2;
+                } else if (window.innerWidth > 576) {
+                    rowCount = 1;
+                }
+
+                if (window.innerWidth > 768 && count == rowCount) {
+                    count = 0;
+                    
+                    generateBackground(bgHeight)
+                }
+		if (window.innerWidth < 768){
+			generateBackground(bgHeight)
+		}
+                if (window.innerWidth > 768 && count == 0) {
+                    console.log(count)
+                    inner += baseStart;
+                    inner += baseend;
+                    count++
+
+
+                }
+
+                if (window.innerWidth > 768 && imgSizes.length == 1) {
+                    inner += baseStart;
+                    inner += baseend;
+                }
+
                 inner += baseStart;
-                inner += `<img src="${images[i]}" alt="${titles[i]} - ${authors[i]} (${publishers[i]}, ${date[i]})" style="position:absolute;display:block;top:${maxHeight-currentHeight}px">`
+                
+                inner += `<img  class="bookImage" class="my-4" src="${images[i]}" alt="${titles[i]} - ${authors[i]} (${publishers[i]}, ${date[i]})" style="margin-left:auto;margin-top:auto;margin-bottom:auto;display:block;height:${bgHeight*0.8}px ;width:auto">`
+                if (olvasotts[i] == 1) {
+                    inner += `<div style="display:flex; align-items: flex-end; float:left; height:${bgHeight*0.8}px;" id="${ids[i]}"><i class="fa-solid fa-square-check fa-2xl" style=" color: #73ff00; margin-top:98%" onclick="changeState(${ids[i]}, false)"></i></div>`
+                } else if (olvasotts[i] == 0) {
+                    inner += `<div style="display:flex; align-items: flex-end; float:left; height:${bgHeight*0.8}px;" id="${ids[i]}"><i class="fa-regular fa-square-check fa-2xl" style="color: #73ff00; margin-top:98%" onclick="changeState(${ids[i]}, true)"></i></div>`
+                }
+
                 inner += baseend;
+                count++
             }
-
-
             img.innerHTML = start + inner + end;
-            console.log(inner)
-
         })
         .catch((error) => {
             console.error(error);
@@ -600,9 +749,11 @@ function getImages() {
     let authors = [];
     let publishers = [];
     let date = [];
+    let ids = []
+    let olvasotts = []
     let username = getCookie("user");
     return new Promise((resolve, reject) => {
-            fetch('http://backend.buborek-marko.online/adatLekérés.php?username=' + encodeURIComponent(username))
+            fetch('http://kellsosserver.duckdns.org:7000/adatLekérés.php?username=' + encodeURIComponent(username))
                 .then(response => response.json())
                 .then(data => {
 
@@ -613,12 +764,18 @@ function getImages() {
                         authors.push(data[i]["szerzo"]);
                         publishers.push(data[i]["kiado"]);
                         date.push(data[i]["megjelenes"]);
+                        ids.push(data[i]["id"])
+                        olvasotts.push(data[i]["olvasott"])
                     }
-                    return { "images": images, "titles": titles, "authors": authors, "publishers": publishers, "data": date }
+                    return { "images": images, "titles": titles, "authors": authors, "publishers": publishers, "data": date, "ids": ids, "olvasotts": olvasotts }
 
 
                 });
-            resolve({ "images": images, "titles": titles, "authors": authors, "publishers": publishers, "date": date });
+            setTimeout(() => {
+              
+                resolve({ "images": images, "titles": titles, "authors": authors, "publishers": publishers, "date": date, "ids": ids, "olvasotts": olvasotts });
+            }, 1000);
+
         })
         .catch(error => {
             reject(error);
@@ -626,13 +783,13 @@ function getImages() {
 
 }
 
-function loading() {
+async function loading() {
 
 
 
     getImages()
         .then(data => {
-            console.log(data)
+            
             let bgStats = generateBackground();
 
             let heightIterations = -1;
@@ -673,14 +830,14 @@ function loading() {
                     heightIterations = window.innerHeight / bgStats["optimalHeight"];
                 }
             }
-            let backgroundStats = generateBackground(heightIterations + 1);
+            let backgroundStats = generateBackground(heightIterations + 2);
 
-            generateImages(columnSize, backgroundStats, data.images, data.titles, data.authors, data.publishers, data.date);;
+            generateImages(columnSize, backgroundStats, data.images, data.titles, data.authors, data.publishers, data.date, data.ids, data.olvasotts);
 
 
         })
         .catch(error => {
-            // Hiba kezelése
+            
             console.error(error);
         });
 
