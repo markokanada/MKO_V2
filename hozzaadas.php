@@ -16,10 +16,10 @@ $kep= $input["kep"];
 
 
 
-$servername = "hosting2291214.online.pro";
+$servername = "192.168.1.61";
 $dbname = "00653382_mko";
-$dbusername = "00653382_mko";
-$password = "KellSoHun2022";
+$dbusername = "admin";
+$password = "982467";
 
 $conn = new mysqli($servername, $dbusername, $password, $dbname);
 
@@ -29,8 +29,8 @@ if ($conn->connect_error) {
 }
 
 
-$sql = "INSERT INTO books (username, cim, szerzo, kiado, megjelenes,kep )
-VALUES ('$username', '$cim', '$szerzo', '$kiado', '$megjelenes', '$kep')";
+$sql = "INSERT INTO books (username, cim, szerzo, kiado, megjelenes,kep, olvasott )
+VALUES ('$username', '$cim', '$szerzo', '$kiado', '$megjelenes', '$kep', 0)";
 
 if ($conn->query($sql) === TRUE) {
   echo "success";

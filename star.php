@@ -12,9 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $id = uniqid();
 
   
-  $servername = "hosting2291214.online.pro";
-  $username = "00653382_mko";
-  $password = "KellSoHun2022";
+  $servername = "192.168.1.61";
+  $username = "admin";
+  $password = "982467";
   $dbname = "00653382_mko";
   $conn = new mysqli($servername, $username, $password, $dbname);
 

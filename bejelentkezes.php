@@ -11,9 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $email_username = $input["username"];
   $userpassword = $input["password"];
 
-  $servername = "hosting2291214.online.pro";
-  $username = "00653382_mko";
-  $password = "KellSoHun2022";
+  $servername = "192.168.1.61";
+  $username = "admin";
+  $password = "982467";
   $dbname = "00653382_mko";
 
   $dsn = "mysql:host=$servername;dbname=$dbname;charset=utf8";

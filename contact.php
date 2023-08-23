@@ -6,7 +6,7 @@ header('Access-Control-Allow-Headers: Content-Type');
 // Ellenőrizzük, hogy az űrlap elküldése történt-e
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Beállítjuk a címzett e-mail címét
-  $to_email = 'contact@buborek-marko.online';
+  $to_email = 'markokanadateam2@gmail.com';
 
   // Az űrlapról kapott adatok
   $name = $_POST['name'];

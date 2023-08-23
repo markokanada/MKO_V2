@@ -3,50 +3,64 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-if(file_get_contents('php://input') !== null) {
-  $inputJSON = file_get_contents('php://input');
-  $input = json_decode($inputJSON, TRUE); //convert JSON into array
-    $username = $input['username'];
-    $email = $input['email'];
-    $password_plain = $input['password'];
-    $password_hashed = password_hash($password_plain, PASSWORD_DEFAULT);
-    
-    // Kapcsolódás az adatbázishoz
-    $servername = "hosting2291214.online.pro";
-    $username_db = "00653382_mko";
-    $password_db = "KellSoHun2022";
-    $dbname = "00653382_mko";
+$inputJSON = file_get_contents('php://input');
+$input = json_decode($inputJSON, true); //convert JSON into array
 
-    $conn = mysqli_connect($servername, $username_db, $password_db, $dbname);
-    if (!$conn) {
-        echo("kapcsolódási hiba!");
-        die("Kapcsolódási hiba: " . mysqli_connect_error());
-    }
-    else{
-      echo("Kapcsolat stabil");
-    }
-    // Beszúrás az adatbázisba
-    $stmt = mysqli_prepare($conn, "INSERT INTO users (username, email, jelszo) VALUES ('$username', '$email', '$password_hashed')");
-    $result = mysqli_stmt_execute($stmt);
-
-    if ($result) {
-      echo("sikeres beszúrás!");
-        echo json_encode(array('success' => true));
-    } else {
-      echo("Nem sikerült a beszúrás.");
-        echo json_encode(array('success' => false));
-    }
-
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
-} 
-else {
-    echo json_encode(array('success' => false, 'message' => 'Hiányzó adatok.'));
+if ($input === null || json_last_error() !== JSON_ERROR_NONE) {
+    echo json_encode(array('success' => false, 'message' => 'Invalid JSON data.'));
+    exit;
 }
+
+if (!isset($input['username']) || !isset($input['email']) || !isset($input['password'])) {
+    echo json_encode(array('success' => false, 'message' => 'Missing data fields.'));
+    exit;
+}
+
+$username = $input['username'];
+$email = $input['email'];
+$password_plain = $input['password'];
+$password_hashed = password_hash($password_plain, PASSWORD_DEFAULT);
+$tipus = 0;
+
+// Debug output for input data
+var_dump($username);
+var_dump($email);
+var_dump($password_plain);
+var_dump($password_hashed);
+
+// Kapcsolódás az adatbázishoz
+$servername = "192.168.1.61";
+$username_db = "admin";
+$password_db = "982467";
+$dbname = "00653382_mko";
+
+$conn = mysqli_connect($servername, $username_db, $password_db, $dbname);
+if (!$conn) {
+    echo "kapcsolódási hiba!";
+    die("Kapcsolódási hiba: " . mysqli_connect_error());
+} else {
+    echo "Kapcsolat stabil";
+}
+
+// Debug output for database connection
+var_dump($conn); // Display the connection status and object details
+
+// Beszúrás az adatbázisba using prepared statements
+$stmt = mysqli_prepare($conn, "INSERT INTO users (username, email, jelszo, tipus) VALUES (?, ?, ?, ?)");
+mysqli_stmt_bind_param($stmt, "ssss", $username, $email, $password_hashed, $tipus); // Assuming 'jelszo' column is of string type ('s')
+$result = mysqli_stmt_execute($stmt);
+
+// Debug output for insert operation
+var_dump($result); // Display the result of the statement execution
+
+// Additional debugging
+if (mysqli_affected_rows($conn) > 0) {
+    echo "Data inserted successfully!";
+} else {
+    echo "No data inserted.";
+}
+
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
 ?>
-
-
-
-
-
 
