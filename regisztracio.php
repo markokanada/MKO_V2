@@ -4,7 +4,7 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 $inputJSON = file_get_contents('php://input');
-$input = json_decode($inputJSON, true); //convert JSON into array
+$input = json_decode($inputJSON, true); 
 
 if ($input === null || json_last_error() !== JSON_ERROR_NONE) {
     echo json_encode(array('success' => false, 'message' => 'Invalid JSON data.'));
@@ -22,13 +22,11 @@ $password_plain = $input['password'];
 $password_hashed = password_hash($password_plain, PASSWORD_DEFAULT);
 $tipus = 0;
 
-// Debug output for input data
 var_dump($username);
 var_dump($email);
 var_dump($password_plain);
 var_dump($password_hashed);
 
-// Kapcsolódás az adatbázishoz
 $servername = "192.168.1.61";
 $username_db = "admin";
 $password_db = "982467";
@@ -42,18 +40,12 @@ if (!$conn) {
     echo "Kapcsolat stabil";
 }
 
-// Debug output for database connection
-var_dump($conn); // Display the connection status and object details
-
-// Beszúrás az adatbázisba using prepared statements
+var_dump($conn); 
 $stmt = mysqli_prepare($conn, "INSERT INTO users (username, email, jelszo, tipus) VALUES (?, ?, ?, ?)");
 mysqli_stmt_bind_param($stmt, "ssss", $username, $email, $password_hashed, $tipus); // Assuming 'jelszo' column is of string type ('s')
 $result = mysqli_stmt_execute($stmt);
 
-// Debug output for insert operation
-var_dump($result); // Display the result of the statement execution
-
-// Additional debugging
+var_dump($result); 
 if (mysqli_affected_rows($conn) > 0) {
     echo "Data inserted successfully!";
 } else {

@@ -4,10 +4,8 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-// Sanitize and validate the input
 $user = isset($_GET['username']) ? $_GET['username'] : '';
-$user = trim($user); // Remove leading/trailing spaces
-
+$user = trim($user); 
 if (empty($user)) {
     die("Error: Username is empty.");
 }
@@ -22,11 +20,9 @@ if (!$conn) {
     die("Kapcsolódási hiba: " . mysqli_connect_error());
 }
 
-// Check if the user is an email address
 if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
     $email = mysqli_real_escape_string($conn, $user);
 
-    // Fetch the username from the 'users' table based on the email address
     $userQuery = "SELECT username FROM users WHERE email = '${email}'";
     $userResult = mysqli_query($conn, $userQuery);
 
@@ -39,11 +35,9 @@ if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
         die("User not found.");
     }
 
-    // Set the $user variable to the username fetched from the 'users' table
     $user = $userData['username'];
 }
 
-// Prepare the SQL query with proper sanitization (to prevent SQL injection)
 $user = mysqli_real_escape_string($conn, $user);
 $sql = "SELECT * FROM books WHERE (username = '${user}') ORDER BY olvasott DESC, cim ASC";
 
