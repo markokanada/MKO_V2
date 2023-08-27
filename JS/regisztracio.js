@@ -76,8 +76,7 @@ function problemHappend() {
 
 
 document.getElementById('registration-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // megakadályozza az űrlap alapértelmezett elküldését
-
+    event.preventDefault();
     var username = document.getElementById('username').value;
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
@@ -99,7 +98,6 @@ document.getElementById('registration-form').addEventListener('submit', function
 
     var hashedPassword = password;
 
-    // elküldi az adatokat a szervernek
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://kellsosserver.duckdns.org:7000/regisztracio.php');
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -114,6 +112,5 @@ document.getElementById('registration-form').addEventListener('submit', function
 });
 
 function isValidEmail(email) {
-    // egyszerű e-mail ellenőrzési szabályok
     return /\S+@\S+\.\S+/.test(email);
 }

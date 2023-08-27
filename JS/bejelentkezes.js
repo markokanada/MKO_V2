@@ -36,7 +36,7 @@ loginForm.addEventListener('submit', async(event) => {
     if (data.success) {
         document.cookie = `logedIn=${true}; expires=${new Date(Date.now() + 30 * 60 * 1000).toUTCString()}; path=/`;
         document.cookie = `user=${username}; expires=${new Date(Date.now() + 30 * 60 * 1000).toUTCString()}; path=/`;
-        window.location.href = 'mkov2.html';
+        window.location.href = 'mkov2.html#fooldal';
     } else {
         problemHappend(data.message);
     }

@@ -1,3 +1,7 @@
+html {
+    background-color: #472601;
+}
+
 #sidebar {
     position: fixed;
     top: 0;
@@ -397,8 +401,29 @@ body {
 
 .images {
     position: absolute;
-    z-index: 100;
+    z-index: 2;
     width: 100%;
+}
+
+.priceTag {
+    position: absolute;
+    background-color: #ccc;
+    z-index: 1;
+    border-radius: 5%;
+    /* Szürke hátterű árcédula */
+}
+
+.triangle {
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 20px solid #ccc;
+    z-index: -1;
 }
 
 @keyframes progress {
@@ -416,5 +441,61 @@ body {
     }
     #toggle-sidebar {
         display: none;
+    }
+}
+
+.container {
+    padding-left: 0px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+    z-index: 3;
+}
+
+.rectangle {
+    position: absolute;
+    background-color: #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    width: 50%;
+    z-index: 3;
+    height: 70px;
+}
+
+.rectangle i {
+    font-size: 24px;
+    margin: 0 5px;
+}
+
+.highlighted-text {
+    border: 2px solid #000;
+    padding: 5px;
+    border-radius: 5px;
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        height: 70px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+    }
+    .rectangle {
+        width: 98vw;
+    }
+}
+
+@media (min-width: 768px) {
+    .rectangle {
+        border-radius: 10px 0 0 0;
     }
 }

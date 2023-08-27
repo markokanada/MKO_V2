@@ -170,18 +170,16 @@ function SuccessfullImageUpload() {
         var minutes = Math.floor(seconds / 60);
         var remainingSeconds = seconds % 60;
 
-        // A számformátum megőrzése (pl. 09:05 helyett 9:5)
         var formattedTime = (minutes < 10 ? "0" : "") + minutes + ":" + (remainingSeconds < 10 ? "0" : "") + remainingSeconds;
         countdownElement.innerHTML = formattedTime;
 
-        // Visszaszámlálás leállítása, ha elérjük a 0-át
         if (seconds === 0) {
           clearInterval(interval);
           countdownElement.innerHTML = "Vége a visszaszámlálásnak!";
         }
 
-        seconds--; // Egy másodperccel csökkentjük az értéket
-      }, 1000); // Ez a függvény 1000 ms-enként, azaz 1 másodpercenként fut le
+        seconds--; 
+      }, 1000); 
     }
 
 function NotFoundedWarning() {
@@ -248,8 +246,7 @@ function Google(isbn) {
             })
             .then(data => {
                 setTimeout(() => {
-                    // Hibás Promise kezelés, a reject() hívás hiányzik, így a Promise soha nem teljesül.
-                    resolve(data); // Hiányzik a reject() hívás, ami jelzi a hibát
+                    resolve(data); 
                 }, 1000);
             })
             .catch(error => {
@@ -272,8 +269,7 @@ function openlibrary(isbn) {
             .then(data => {
 
                 setTimeout(() => {
-                    // Hibás Promise kezelés, a reject() hívás hiányzik, így a Promise soha nem teljesül.
-                    resolve(data);; // Hiányzik a reject() hívás, ami jelzi a hibát
+                    resolve(data);;
                 }, 1000);
 
             })
@@ -330,8 +326,7 @@ let error = "";
                 }
 
                 setTimeout(() => {
-                    // Hibás Promise kezelés, a reject() hívás hiányzik, így a Promise soha nem teljesül.
-                    resolve(bookData1); // Hiányzik a reject() hívás, ami jelzi a hibát
+                    resolve(bookData1);
                 }, 1000);
             } else {
 
@@ -357,8 +352,7 @@ let error = "";
                         bookData2.megjelenes = book2.publish_date;
                         bookData2.kep = `http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
                         setTimeout(() => {
-                            // Hibás Promise kezelés, a reject() hívás hiányzik, így a Promise soha nem teljesül.
-                            resolve(bookData2); // Hiányzik a reject() hívás, ami jelzi a hibát
+                            resolve(bookData2);
                         }, 1000);
                     } else {
 
@@ -545,7 +539,6 @@ function currentScales() {
 
 function imageScales(urls) {
     return new Promise((resolve, reject) => {
-        //console.log(urls)
         let sizes = [];
         let count = 0;
         for (let i = 0; i < urls.length; i++) {
@@ -560,8 +553,7 @@ function imageScales(urls) {
                 count++;
                 if (count === urls.length) {
                     setTimeout(() => {
-                        // Hibás Promise kezelés, a reject() hívás hiányzik, így a Promise soha nem teljesül.
-                        resolve(sizes); // Hiányzik a reject() hívás, ami jelzi a hibát
+                        resolve(sizes);
                     }, 10);
 
                 }
@@ -663,8 +655,7 @@ function generateImages(columnSize, bgstat, images, titles, authors, publishers,
     }
 
 
-    //images = ["http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"]
-    imageScales(images) //["https://i.imgur.com/17PrU7g.jpg", "http://books.google.com/books/content?id=fZGQEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"])
+    imageScales(images) 
         .then((imgSizes) => {
 
 
@@ -782,8 +773,7 @@ function getImages() {
 
                 });
             setTimeout(() => {
-                // Hibás Promise kezelés, a reject() hívás hiányzik, így a Promise soha nem teljesül.
-                resolve({ "images": images, "titles": titles, "authors": authors, "publishers": publishers, "date": date, "ids": ids, "olvasotts": olvasotts }); // Hiányzik a reject() hívás, ami jelzi a hibát
+                resolve({ "images": images, "titles": titles, "authors": authors, "publishers": publishers, "date": date, "ids": ids, "olvasotts": olvasotts });
             }, 1000);
 
         })
@@ -800,7 +790,6 @@ function loading() {
     getImages()
         .then(data => {
             console.log(data)
-                //console.log({ "data": data })
             let bgStats = generateBackground();
 
             let heightIterations = -1;
@@ -848,7 +837,6 @@ function loading() {
 
         })
         .catch(error => {
-            // Hiba kezelése
             console.error(error);
         });
 
