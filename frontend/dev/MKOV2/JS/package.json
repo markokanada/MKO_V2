@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "isbn-validator": "^1.2.0"
+  }
+}
